@@ -138,9 +138,10 @@ function renderOverviewTab() {
     plTagElem.className = 'text-[11px] font-bold text-rose-600';
   }
 
-  // Render Overview Charts (2 Charts)
+  // Render Overview Charts (3 Charts)
   renderChart1_CompareBar();
   renderChart2_ServiceTrendsLine();
+  renderChart3_IpdServiceTrendsLine();
 }
 
 function renderChart1_CompareBar() {
@@ -273,6 +274,64 @@ function renderChart2_ServiceTrendsLine() {
           data: opdPatients,
           borderColor: '#0d9488',
           backgroundColor: 'rgba(13, 148, 136, 0.1)',
+          fill: true,
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f1f5f9' } }
+      },
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11, family: 'Sarabun' } } }
+      }
+    }
+  });
+}
+
+function renderChart3_IpdServiceTrendsLine() {
+  const ctx = document.getElementById('chart-ipd-service-trends');
+  if (!ctx) return;
+
+  const ipdData = window.sheetsService.cache['stats_combined']?.multiTables?.[1]?.processed || window.sheetsService.cache['ข้อมูลผู้ป่วยใน']?.processed;
+  if (!ipdData || !ipdData.data) return;
+
+  const monthLabels = [];
+  const ipdAdmits = [];
+  const ipdStayDays = [];
+
+  ipdData.data.forEach(r => {
+    if (r[0]) {
+      monthLabels.push(r[0].replace(' 2568', '-68').replace(' 2569', '-69'));
+      ipdAdmits.push(window.sheetsService.parseNumber(r[1]));
+      ipdStayDays.push(window.sheetsService.parseNumber(r[7]));
+    }
+  });
+
+  if (chartInstances['chart3']) chartInstances['chart3'].destroy();
+
+  chartInstances['chart3'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: monthLabels,
+      datasets: [
+        {
+          label: 'จำนวนวันนอนรวม (วัน)',
+          data: ipdStayDays,
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          fill: true,
+          tension: 0.3
+        },
+        {
+          label: 'จำนวนผู้ป่วยใน Admit (คน)',
+          data: ipdAdmits,
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139, 92, 246, 0.1)',
           fill: true,
           tension: 0.3
         }
