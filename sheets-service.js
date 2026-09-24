@@ -218,8 +218,7 @@ class SheetsService {
     }
 
     if (sheetIdOrName === 'ข้อมูลผู้ป่วยใน') {
-      // Row 1: Headers, Row 2: Subheaders (Admit, UC, OFC, LGO, SSS, วันนอน...)
-      const dataRows = rows.slice(2).filter(r => {
+      const dataRows = rows.slice(1).filter(r => {
         if (!r[0] || String(r[0]).trim() === '') return false;
         return !this.isTotalRow(r);
       });
