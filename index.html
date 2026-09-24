@@ -148,17 +148,31 @@
           </div>
         </div>
 
-        <!-- Chart 2: Service Trends Line Chart -->
+        <!-- Chart 2: OPD Service Trends Line Chart -->
         <div class="chart-card">
           <div class="flex items-center justify-between mb-4">
             <div>
               <h2 class="text-sm font-bold text-slate-800">2. สถิติการให้บริการผู้ป่วยนอก (OPD Visits & คน) รายเดือน</h2>
-              <p class="text-xs text-slate-500">แนวโน้มจำนวนครั้งการรับบริการ และจำนวนผู้รับบริการรายคน</p>
+              <p class="text-xs text-slate-500">แนวโน้มจำนวนครั้งการรับบริการ และจำนวนผู้รับบริการรายคน จากแท็บ "ข้อมูลผู้ป่วยนอก"</p>
             </div>
             <span class="text-xs bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded">ครั้ง / คน</span>
           </div>
           <div class="h-80">
             <canvas id="chart-service-trends"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: IPD Service Trends Line Chart -->
+        <div class="chart-card">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-sm font-bold text-slate-800">3. สถิติการให้บริการผู้ป่วยใน (IPD Admit & วันนอน) รายเดือน</h2>
+              <p class="text-xs text-slate-500">แนวโน้มจำนวนผู้ป่วยใน Admit (คน) และจำนวนวันนอนรวม (วัน) จากแท็บ "ข้อมูลผู้ป่วยใน"</p>
+            </div>
+            <span class="text-xs bg-purple-100 text-purple-700 font-semibold px-2.5 py-1 rounded">คน / วัน</span>
+          </div>
+          <div class="h-80">
+            <canvas id="chart-ipd-service-trends"></canvas>
           </div>
         </div>
 
