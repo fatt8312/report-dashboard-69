@@ -1,54 +1,318 @@
-/* Hospital Revenue Dashboard Stylesheet */
+/* Hospital Revenue Dashboard Stylesheet - KBO Video Background Gradient Edition */
 :root {
-  --primary: #0284c7;
-  --primary-dark: #0369a1;
-  --primary-light: #e0f2fe;
-  --secondary: #0d9488;
-  --bg-main: #f8fafc;
+  /* Default Light Mode Colors */
+  --bg-gradient-start: #e0f7fa;
+  --bg-gradient-end: #f8fafc;
   --card-bg: #ffffff;
+  --card-border: #e2e8f0;
   --text-main: #0f172a;
   --text-muted: #64748b;
-  --border-color: #e2e8f0;
+  --text-heading: #0f172a;
+  --table-header-bg: #f8fafc;
+  --table-border: #e2e8f0;
+  --table-hover: #f1f5f9;
+  --subtab-bg: #ffffff;
+  --subtab-text: #475569;
+  
+  /* Dynamic Theme Accents (Default KBO Cyan/Teal Gradient) */
+  --theme-primary: #0891b2;
+  --theme-secondary: #0e7490;
+  --theme-dark: #155e75;
+  --theme-light: #cffafe;
+  --theme-gradient-start: #0e7490;
+  --theme-gradient-mid: #06b6d4;
+  --theme-gradient-end: #6366f1;
+  --theme-shadow: rgba(8, 145, 178, 0.3);
+  --theme-card-accent: rgba(8, 145, 178, 0.08);
+
+  --chart-grid: #f1f5f9;
+  --chart-text: #475569;
+}
+
+/* Dark Mode Overrides (High Contrast & Legibility) */
+[data-mode="dark"] {
+  --bg-gradient-start: #0b2d34;
+  --bg-gradient-end: #051419;
+  --card-bg: rgba(17, 29, 46, 0.94);
+  --card-border: rgba(255, 255, 255, 0.18);
+  --text-main: #ffffff;
+  --text-muted: #e2e8f0;
+  --text-heading: #ffffff;
+  --table-header-bg: rgba(23, 38, 60, 0.95);
+  --table-border: rgba(255, 255, 255, 0.18);
+  --table-hover: rgba(27, 42, 64, 0.95);
+  --subtab-bg: rgba(23, 38, 60, 0.9);
+  --subtab-text: #ffffff;
+
+  --chart-grid: rgba(255, 255, 255, 0.15);
+  --chart-text: #ffffff;
+}
+
+/* Force bright high-contrast text in Dark Mode */
+[data-mode="dark"] body {
+  color: #ffffff !important;
+}
+
+[data-mode="dark"] .text-slate-900,
+[data-mode="dark"] .text-slate-800,
+[data-mode="dark"] .text-slate-700,
+[data-mode="dark"] .text-slate-600 {
+  color: #ffffff !important;
+}
+
+[data-mode="dark"] .text-slate-500,
+[data-mode="dark"] .text-slate-400 {
+  color: #cbd5e1 !important;
+}
+
+[data-mode="dark"] .bg-white {
+  background-color: var(--card-bg) !important;
+  color: #ffffff !important;
+  border-color: var(--card-border) !important;
+}
+
+[data-mode="dark"] #sub-tabs-container {
+  background-color: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+
+[data-mode="dark"] .sub-tab {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-mode="dark"] .sub-tab:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+[data-mode="dark"] input[type="text"],
+[data-mode="dark"] input[type="search"],
+[data-mode="dark"] select {
+  background-color: #17263c !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-mode="dark"] input::placeholder {
+  color: #cbd5e1 !important;
+}
+
+/* Color Theme Definitions - Rich 3-Stop KBO Gradient Profiles & Dynamic Background Gradients */
+
+/* 1. KBO Cyan / Teal (เขียวอมฟ้า-ไซแอน - Exact Video Gradient Profile) */
+[data-theme="cyan"] {
+  --theme-primary: #0891b2;
+  --theme-secondary: #0e7490;
+  --theme-dark: #155e75;
+  --theme-light: #cffafe;
+  --theme-gradient-start: #0e7490;
+  --theme-gradient-mid: #06b6d4;
+  --theme-gradient-end: #6366f1;
+  --theme-shadow: rgba(8, 145, 178, 0.35);
+  --theme-card-accent: rgba(8, 145, 178, 0.08);
+
+  --bg-gradient-start: #e0f7fa;
+  --bg-gradient-end: #f8fafc;
+}
+
+[data-mode="dark"][data-theme="cyan"],
+[data-mode="dark"] [data-theme="cyan"] {
+  --bg-gradient-start: #0b2d34;
+  --bg-gradient-end: #051419;
+}
+
+/* 2. Hospital Blue (ฟ้า-น้ำเงินทะเล) */
+[data-theme="blue"] {
+  --theme-primary: #0284c7;
+  --theme-secondary: #0369a1;
+  --theme-dark: #0c4a6e;
+  --theme-light: #e0f2fe;
+  --theme-gradient-start: #0369a1;
+  --theme-gradient-mid: #0284c7;
+  --theme-gradient-end: #38bdf8;
+  --theme-shadow: rgba(2, 132, 199, 0.35);
+  --theme-card-accent: rgba(2, 132, 199, 0.08);
+
+  --bg-gradient-start: #e0f2fe;
+  --bg-gradient-end: #f8fafc;
+}
+
+[data-mode="dark"][data-theme="blue"],
+[data-mode="dark"] [data-theme="blue"] {
+  --bg-gradient-start: #0a2744;
+  --bg-gradient-end: #041220;
+}
+
+/* 3. Emerald Green (เขียวมรกต) */
+[data-theme="emerald"] {
+  --theme-primary: #059669;
+  --theme-secondary: #047857;
+  --theme-dark: #065f46;
+  --theme-light: #d1fae5;
+  --theme-gradient-start: #065f46;
+  --theme-gradient-mid: #059669;
+  --theme-gradient-end: #34d399;
+  --theme-shadow: rgba(5, 150, 105, 0.35);
+  --theme-card-accent: rgba(5, 150, 105, 0.08);
+
+  --bg-gradient-start: #d1fae5;
+  --bg-gradient-end: #f8fafc;
+}
+
+[data-mode="dark"][data-theme="emerald"],
+[data-mode="dark"] [data-theme="emerald"] {
+  --bg-gradient-start: #082a1f;
+  --bg-gradient-end: #04140e;
+}
+
+/* 4. Amber / Gold (ส้ม-ทอง) */
+[data-theme="amber"] {
+  --theme-primary: #d97706;
+  --theme-secondary: #b45309;
+  --theme-dark: #78350f;
+  --theme-light: #fef3c7;
+  --theme-gradient-start: #78350f;
+  --theme-gradient-mid: #d97706;
+  --theme-gradient-end: #fbbf24;
+  --theme-shadow: rgba(217, 119, 6, 0.35);
+  --theme-card-accent: rgba(217, 119, 6, 0.08);
+
+  --bg-gradient-start: #fef3c7;
+  --bg-gradient-end: #f8fafc;
+}
+
+[data-mode="dark"][data-theme="amber"],
+[data-mode="dark"] [data-theme="amber"] {
+  --bg-gradient-start: #2e1806;
+  --bg-gradient-end: #140b03;
+}
+
+/* 5. Royal Purple (ม่วงรัชกาล) */
+[data-theme="purple"] {
+  --theme-primary: #7c3aed;
+  --theme-secondary: #6d28d9;
+  --theme-dark: #4c1d95;
+  --theme-light: #ede9fe;
+  --theme-gradient-start: #4c1d95;
+  --theme-gradient-mid: #7c3aed;
+  --theme-gradient-end: #c084fc;
+  --theme-shadow: rgba(124, 58, 237, 0.35);
+  --theme-card-accent: rgba(124, 58, 237, 0.08);
+
+  --bg-gradient-start: #ede9fe;
+  --bg-gradient-end: #f8fafc;
+}
+
+[data-mode="dark"][data-theme="purple"],
+[data-mode="dark"] [data-theme="purple"] {
+  --bg-gradient-start: #1f0d38;
+  --bg-gradient-end: #0e051c;
+}
+
+/* 6. Rose Pink (ชมพู-บานเย็น) */
+[data-theme="pink"] {
+  --theme-primary: #db2777;
+  --theme-secondary: #be185d;
+  --theme-dark: #831843;
+  --theme-light: #fce7f3;
+  --theme-gradient-start: #831843;
+  --theme-gradient-mid: #db2777;
+  --theme-gradient-end: #f472b6;
+  --theme-shadow: rgba(219, 39, 119, 0.35);
+  --theme-card-accent: rgba(219, 39, 119, 0.08);
+
+  --bg-gradient-start: #fce7f3;
+  --bg-gradient-end: #f8fafc;
+}
+
+[data-mode="dark"][data-theme="pink"],
+[data-mode="dark"] [data-theme="pink"] {
+  --bg-gradient-start: #300a1d;
+  --bg-gradient-end: #17040d;
+}
+
+/* 7. Royal Indigo (น้ำเงินเข้ม-กรมท่า) */
+[data-theme="indigo"] {
+  --theme-primary: #2563eb;
+  --theme-secondary: #1d4ed8;
+  --theme-dark: #1e3a8a;
+  --theme-light: #dbeafe;
+  --theme-gradient-start: #1e3a8a;
+  --theme-gradient-mid: #2563eb;
+  --theme-gradient-end: #818cf8;
+  --theme-shadow: rgba(37, 99, 235, 0.35);
+  --theme-card-accent: rgba(37, 99, 235, 0.08);
+
+  --bg-gradient-start: #dbeafe;
+  --bg-gradient-end: #f8fafc;
+}
+
+[data-mode="dark"][data-theme="indigo"],
+[data-mode="dark"] [data-theme="indigo"] {
+  --bg-gradient-start: #0d1b38;
+  --bg-gradient-end: #060c1d;
 }
 
 body {
   font-family: 'Sarabun', 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg-main);
+  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  background-attachment: fixed;
   color: var(--text-main);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  transition: background 0.4s ease, color 0.3s ease;
 }
 
-/* Glassmorphism Header */
+/* Dynamic KBO Glassmorphism Header */
 .glass-header {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(135deg, var(--theme-gradient-start) 0%, var(--theme-gradient-mid) 55%, var(--theme-gradient-end) 100%);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   position: sticky;
   top: 0;
   z-index: 50;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  transition: background 0.4s ease;
 }
 
 /* Card Styling */
 .stat-card {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--card-bg);
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--theme-gradient-start), var(--theme-gradient-end));
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px -2px rgba(0, 0, 0, 0.14);
 }
 
 .chart-card {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
   padding: 1.25rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(8px);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Tab Navigation */
@@ -56,49 +320,53 @@ body {
   padding: 0.75rem 1.25rem;
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--text-muted);
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .nav-tab:hover {
-  color: var(--primary);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .nav-tab.active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
-  background-color: rgba(2, 132, 199, 0.05);
+  color: #ffffff;
+  border-bottom-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.22);
 }
 
 .sub-tab {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   border-radius: 9999px;
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--subtab-bg);
+  color: var(--subtab-text);
   cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  border: 1px solid var(--card-border);
   white-space: nowrap;
 }
 
 .sub-tab:hover {
-  background: #e2e8f0;
+  background: var(--theme-light);
+  color: var(--theme-primary);
 }
 
 .sub-tab.active {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+  background: linear-gradient(135deg, var(--theme-gradient-start), var(--theme-gradient-end));
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 3px 8px var(--theme-shadow);
 }
 
 /* Table Styling */
 .custom-table-container {
   overflow-x: auto;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  border: 1px solid var(--table-border);
 }
 
 .custom-table {
@@ -106,52 +374,85 @@ body {
   border-collapse: collapse;
   text-align: left;
   font-size: 0.875rem;
+  color: var(--text-main);
 }
 
 .custom-table th {
-  background-color: #f8fafc;
-  color: #475569;
+  background-color: var(--table-header-bg);
+  color: var(--text-muted);
   font-weight: 600;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--table-border);
   position: sticky;
   top: 0;
 }
 
 .custom-table td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--table-border);
 }
 
 .custom-table tr:hover {
-  background-color: #f8fafc;
+  background-color: var(--table-hover);
 }
 
-/* Live Pulse Badge */
-.live-badge {
-  display: inline-flex;
+/* Floating Theme Bar (Right Side - Matching KBO Connect Widget) */
+.floating-theme-bar {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  background-color: #dcfce7;
-  color: #166534;
-  font-size: 0.75rem;
-  font-weight: 600;
+  gap: 10px;
+  padding: 12px 10px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 30px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.live-dot {
-  width: 8px;
-  height: 8px;
+.theme-swatch {
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background-color: #22c55e;
-  animation: pulse 1.5s infinite;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-@keyframes pulse {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.8; }
+.theme-swatch:hover {
+  transform: scale(1.25);
+  border-color: #ffffff;
+}
+
+.theme-swatch.active {
+  transform: scale(1.25);
+  border-color: #ffffff;
+  box-shadow: 0 0 12px #ffffff;
+}
+
+.mode-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
 }
 
 /* Scrollbar customization */
@@ -160,7 +461,7 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--bg-gradient-end);
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
