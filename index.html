@@ -28,25 +28,37 @@
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
   <!-- Header & Navigation -->
-  <header class="glass-header shadow-sm border-b border-slate-200">
+  <header class="glass-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         
         <!-- Brand / Title -->
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center shadow-md shadow-sky-200 font-bold text-xl">
-            <i class="fa-solid fa-hospital"></i>
+          <div class="w-11 h-11 rounded-full bg-white p-0.5 shadow-lg border border-white/50 flex items-center justify-center overflow-hidden shrink-0">
+            <img src="logohose.png" alt="โลโก้โรงพยาบาลลำทับ" class="w-full h-full object-contain">
           </div>
           <div>
-            <h1 class="text-lg font-bold text-slate-900 leading-tight">ระบบสรุปและวิเคราะห์รายได้ปีงบประมาณ 2569</h1>
-            <p class="text-xs text-slate-500 font-medium">โรงพยาบาลลำทับ • เครือข่ายบริการสุขภาพจังหวัดกระบี่</p>
+            <h1 class="text-lg font-bold text-white leading-tight">ระบบสรุปและวิเคราะห์รายได้ปีงบประมาณ 2569</h1>
+            <p class="text-xs text-white/80 font-medium">โรงพยาบาลลำทับ • เครือข่ายบริการสุขภาพจังหวัดกระบี่</p>
           </div>
         </div>
 
-        <!-- Manual Refresh Button -->
-        <div class="flex items-center gap-4">
-          <button id="btn-manual-refresh" class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm hover:shadow active:scale-95">
-            <i class="fa-solid fa-rotate-right" id="refresh-icon"></i>
+        <!-- Header Actions & Theme Controls -->
+        <div class="flex items-center gap-3">
+          
+          <!-- Mode Toggle Button (Light/Dark) -->
+          <button id="btn-theme-mode" title="เปลี่ยนโหมดกลางวัน/กลางคืน" class="w-9 h-9 rounded-lg bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition backdrop-blur-md border border-white/20 active:scale-95">
+            <i class="fa-solid fa-moon" id="mode-icon"></i>
+          </button>
+
+          <!-- Settings Gear Button -->
+          <button id="btn-toggle-theme-bar" title="ตั้งค่าธีมสีหน้าเว็บ" class="w-9 h-9 rounded-lg bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition backdrop-blur-md border border-white/20 active:scale-95">
+            <i class="fa-solid fa-gear text-base"></i>
+          </button>
+
+          <!-- Manual Refresh Button -->
+          <button id="btn-manual-refresh" class="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-100 text-xs font-bold px-4 py-2 rounded-lg transition shadow-md active:scale-95">
+            <i class="fa-solid fa-rotate-right text-sky-600" id="refresh-icon"></i>
             <span>รีเฟรชข้อมูล</span>
           </button>
         </div>
@@ -54,18 +66,18 @@
       </div>
 
       <!-- Main Category Tabs -->
-      <nav class="flex space-x-1 border-t border-slate-100 mt-1 overflow-x-auto" id="main-nav-tabs">
+      <nav class="flex space-x-1 border-t border-white/10 mt-1 overflow-x-auto" id="main-nav-tabs">
         <button data-tab="overview" class="nav-tab active">
-          <i class="fa-solid fa-chart-pie mr-2 text-sky-500"></i>ภาพรวมผู้บริหาร (Overview)
+          <i class="fa-solid fa-chart-pie mr-2"></i>ภาพรวมผู้บริหาร (Overview)
         </button>
         <button data-tab="cat1" class="nav-tab">
-          <i class="fa-solid fa-money-bill-wave mr-2 text-green-500"></i>สรุปรายรับรายจ่ายกองทุนหลัก
+          <i class="fa-solid fa-money-bill-wave mr-2"></i>สรุปรายรับรายจ่ายกองทุนหลัก
         </button>
         <button data-tab="cat2" class="nav-tab">
-          <i class="fa-solid fa-file-invoice-dollar mr-2 text-indigo-500"></i>สิทธิการรักษา & ลูกหนี้ค่ารักษา
+          <i class="fa-solid fa-file-invoice-dollar mr-2"></i>สิทธิการรักษา & ลูกหนี้ค่ารักษา
         </button>
         <button data-tab="cat3" class="nav-tab">
-          <i class="fa-solid fa-chart-line mr-2 text-amber-500"></i> สถิติการให้บริการผู้ป่วย
+          <i class="fa-solid fa-chart-line mr-2"></i>สถิติการให้บริการผู้ป่วย
         </button>
       </nav>
     </div>
@@ -81,7 +93,7 @@
       <p class="text-xs text-slate-400 mt-1">กดปุ่ม "รีเฟรชข้อมูล" เมื่อต้องการอัปเดตข้อมูลสด</p>
     </div>
 
-    <!-- Overview Tab Content (Matching User Image 2 Mockup!) -->
+    <!-- Overview Tab Content -->
     <section id="tab-overview" class="tab-content hidden space-y-6">
       
       <!-- Top 3 KPI Cards Grid -->
@@ -214,7 +226,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <div class="text-2xl font-bold text-emerald-600" id="sub-kpi2-value">0.00 ฿</div>
+            <div class="text-2xl font-bold text-slate-900" id="sub-kpi2-value">0.00 ฿</div>
             <p class="text-[11px] text-slate-500 mt-1" id="sub-kpi2-sub">สูงสุด: -</p>
           </div>
         </div>
@@ -259,6 +271,33 @@
     </section>
 
   </main>
+
+  <!-- Floating Right Theme Palette Bar (Matching User Reference Image!) -->
+  <div id="floating-theme-bar" class="floating-theme-bar shadow-2xl">
+    
+    <!-- Dark/Light Mode Toggle -->
+    <button id="btn-theme-mode-floating" class="mode-toggle-btn" title="สลับโหมดกลางวัน/กลางคืน">
+      <i class="fa-solid fa-moon" id="floating-mode-icon"></i>
+    </button>
+    
+    <div class="w-5 h-[1px] bg-white/20 my-1"></div>
+
+    <!-- Color Swatches -->
+    <button class="theme-swatch active bg-sky-500" data-theme="blue" title="ธีมสีฟ้า (Hospital Blue)"></button>
+    <button class="theme-swatch bg-cyan-500" data-theme="cyan" title="ธีมสีฟ้าไซแอน (KBO Cyan)"></button>
+    <button class="theme-swatch bg-emerald-500" data-theme="emerald" title="ธีมสีเขียวมรกต (Emerald)"></button>
+    <button class="theme-swatch bg-amber-500" data-theme="amber" title="ธีมสีส้มทอง (Amber Gold)"></button>
+    <button class="theme-swatch bg-purple-600" data-theme="purple" title="ธีมสีม่วง (Royal Purple)"></button>
+    <button class="theme-swatch bg-pink-500" data-theme="pink" title="ธีมสีชมพู (Rose Pink)"></button>
+    <button class="theme-swatch bg-blue-600" data-theme="indigo" title="ธีมสีน้ำเงินเข้ม (Royal Blue)"></button>
+
+    <div class="w-5 h-[1px] bg-white/20 my-1"></div>
+
+    <!-- Toggle Close/Collapse -->
+    <button id="btn-close-theme-bar" class="w-6 h-6 rounded-full bg-white/10 hover:bg-white/30 text-white flex items-center justify-center text-xs transition" title="ซ่อน/แสดง แถบเลือกสี">
+      <i class="fa-solid fa-palette"></i>
+    </button>
+  </div>
 
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
