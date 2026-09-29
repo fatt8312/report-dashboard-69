@@ -45,19 +45,19 @@ const SHEET_CONFIGS = [
   // Group 3: บริการเฉพาะทาง, CT Scan & สถิติ
   //{ id: '425872826', gid: '425872826', sheetName: 'CT scan-คลองท่อม', category: 'cat3', name: 'CT scan คลองท่อม', label: '13. CT Scan รพ.คลองท่อม' },
   //{ id: '1775364745', gid: '1775364745', sheetName: 'CT scan-กระบี่', category: 'cat3', name: 'CT scan รพ.กระบี่', label: '14. CT Scan รพ.กระบี่ (OPD)' },
-  //{ id: '1018261975', gid: '1018261975', sheetName: 'PP Fs รายหน่วยบริการ', category: 'cat3', name: 'PP Fee Schedule', label: '15. PP Fee Schedule (สร้างเสริมสุขภาพ)' },
+  { id: '1018261975', gid: '1018261975', sheetName: 'PP Fs รายหน่วยบริการ', category: 'cat3', name: 'PP Fee Schedule', label: '9. PP Fee Schedule (สร้างเสริมสุขภาพ)' },
   //{ id: '1882338852', gid: '1882338852', sheetName: 'PP Fee schedule 69 จำนวน', category: 'cat3', name: 'PP Fee Schedule 69', label: '16. PP Fee Schedule 2569' },
   //{ id: '1237475376', gid: '1237475376', sheetName: 'บริการวัคซีน', category: 'cat3', name: 'บริการวัคซีน', label: '17. วัคซีนสร้างเสริมภูมิคุ้มกัน' },
   //{ id: '1877989780', gid: '1877989780', sheetName: 'EMS', category: 'cat3', name: 'EMS สพฉ.', label: '18. แพทย์ฉุกเฉิน (EMS สพฉ.)' },
-  //{ id: '1076853556', gid: '1076853556', sheetName: 'Palliative Care', category: 'cat3', name: 'Palliative Care', label: '19. Palliative Care (ดูแลระยะสุดท้าย)' },
-  //{ id: '301771837', gid: '301771837', sheetName: 'อุปกรณ์เทียม/บำบัด', category: 'cat3', name: 'อุปกรณ์เทียม/บำบัด', label: '20. อุปกรณ์เทียม & กายบำบัด' },
-  //{ id: '1482513277', gid: '1482513277', sheetName: 'Seamless for DMIS', category: 'cat3', name: 'Seamless for DMIS', label: '21. Seamless for DMIS' },
+  { id: '1076853556', gid: '1076853556', sheetName: 'Palliative Care(mis)*', category: 'cat3', name: 'Palliative Care', label: '10. Palliative Care (ดูแลระยะสุดท้าย)' },
+  { id: '301771837', gid: '301771837', sheetName: 'อุปกรณ์เทียม(mis)', category: 'cat3', name: 'อุปกรณ์เทียม/บำบัด', label: '11. อุปกรณ์เทียม & กายบำบัด' },
+  { id: '1482513277', gid: '1482513277', sheetName: 'Seamless, HC FS', category: 'cat3', name: 'Seamless for DMIS', label: '12. Seamless for DMIS' },
   //{ id: '705249107', gid: '705249107', sheetName: 'สังคมสงเคราะห์', category: 'cat3', name: 'สังคมสงเคราะห์', label: '22. สังคมสงเคราะห์' },
   { 
     id: 'stats_combined', 
     category: 'cat3', 
     name: 'สถิติผู้ป่วย OPD & IPD', 
-    label: '9. สถิติผู้ป่วย OPD & IPD',
+    label: '13. สถิติผู้ป่วย OPD & IPD',
     tables: [
       { name: 'ข้อมูลผู้ป่วยนอก', title: 'ตารางรายงานสรุปยอดบริการผู้ป่วยนอก (OPD)' },
       { name: 'ข้อมูลผู้ป่วยใน', title: 'ตารางรายงานสรุปยอดบริการผู้ป่วยใน (IPD)' }
