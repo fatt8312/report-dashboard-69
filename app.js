@@ -13,6 +13,9 @@ let activeCat = null;
 let activeSubTabId = '1348229664';
 let chartInstances = {};
 
+let currentTheme = localStorage.getItem('theme-color') || 'cyan';
+let currentMode = localStorage.getItem('theme-mode') || 'light';
+
 // Format Thai Baht currency
 function formatCurrency(num) {
   if (num === null || num === undefined || isNaN(num)) return '0.00';
@@ -30,8 +33,104 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initApp() {
+  initThemeManager();
   setupEventListeners();
   await refreshData();
+}
+
+function initThemeManager() {
+  setTheme(currentTheme, false);
+  setMode(currentMode, false);
+
+  // Setup Theme Swatches
+  document.querySelectorAll('.theme-swatch').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.getAttribute('data-theme');
+      setTheme(theme, true);
+    });
+  });
+
+  // Setup Mode Toggles
+  const modeBtnHeader = document.getElementById('btn-theme-mode');
+  const modeBtnFloating = document.getElementById('btn-theme-mode-floating');
+
+  if (modeBtnHeader) modeBtnHeader.addEventListener('click', toggleMode);
+  if (modeBtnFloating) modeBtnFloating.addEventListener('click', toggleMode);
+
+  // Setup Floating Bar Toggle
+  const toggleBarBtn = document.getElementById('btn-toggle-theme-bar');
+  const closeBarBtn = document.getElementById('btn-close-theme-bar');
+  const floatingBar = document.getElementById('floating-theme-bar');
+
+  if (toggleBarBtn && floatingBar) {
+    toggleBarBtn.addEventListener('click', () => {
+      floatingBar.classList.toggle('hidden');
+    });
+  }
+
+  if (closeBarBtn && floatingBar) {
+    closeBarBtn.addEventListener('click', () => {
+      floatingBar.classList.add('hidden');
+    });
+  }
+}
+
+function setTheme(themeName, reRender = true) {
+  currentTheme = themeName;
+  document.documentElement.setAttribute('data-theme', themeName);
+  localStorage.setItem('theme-color', themeName);
+
+  document.querySelectorAll('.theme-swatch').forEach(swatch => {
+    if (swatch.getAttribute('data-theme') === themeName) {
+      swatch.classList.add('active');
+    } else {
+      swatch.classList.remove('active');
+    }
+  });
+
+  if (reRender) {
+    renderCurrentTab();
+  }
+}
+
+function setMode(mode, reRender = true) {
+  currentMode = mode;
+  document.documentElement.setAttribute('data-mode', mode);
+  if (mode === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+  localStorage.setItem('theme-mode', mode);
+
+  const headerIcon = document.getElementById('mode-icon');
+  const floatingIcon = document.getElementById('floating-mode-icon');
+
+  if (mode === 'dark') {
+    if (headerIcon) headerIcon.className = 'fa-solid fa-sun text-amber-300';
+    if (floatingIcon) floatingIcon.className = 'fa-solid fa-sun text-amber-300';
+  } else {
+    if (headerIcon) headerIcon.className = 'fa-solid fa-moon text-white';
+    if (floatingIcon) floatingIcon.className = 'fa-solid fa-moon text-white';
+  }
+
+  if (reRender) {
+    renderCurrentTab();
+  }
+}
+
+function toggleMode() {
+  const newMode = currentMode === 'light' ? 'dark' : 'light';
+  setMode(newMode, true);
+}
+
+function getChartColors() {
+  const isDark = currentMode === 'dark';
+  return {
+    grid: isDark ? 'rgba(255, 255, 255, 0.15)' : '#e2e8f0',
+    text: isDark ? '#ffffff' : '#334155',
+    legendText: isDark ? '#ffffff' : '#0f172a'
+  };
 }
 
 function setupEventListeners() {
@@ -177,6 +276,8 @@ function renderChart1_CompareBar() {
 
   if (chartInstances['chart1']) chartInstances['chart1'].destroy();
 
+  const colors = getChartColors();
+
   chartInstances['chart1'] = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -204,7 +305,7 @@ function renderChart1_CompareBar() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 12, family: 'Sarabun' } } },
+        legend: { position: 'top', labels: { boxWidth: 12, color: colors.legendText, font: { size: 12, family: 'Sarabun' } } },
         tooltip: {
           callbacks: {
             label: function(context) {
@@ -219,16 +320,18 @@ function renderChart1_CompareBar() {
         }
       },
       scales: {
-        x: { grid: { display: false } },
+        x: { grid: { display: false }, ticks: { color: colors.text, font: { family: 'Sarabun' } } },
         y: {
           ticks: {
+            color: colors.text,
+            font: { family: 'Sarabun' },
             callback: function(value) {
               if (value >= 1e6) return (value / 1e6).toFixed(1) + 'M';
               if (value >= 1e3) return (value / 1e3).toFixed(0) + 'k';
               return value;
             }
           },
-          grid: { color: '#f1f5f9' }
+          grid: { color: colors.grid }
         }
       }
     }
@@ -256,6 +359,8 @@ function renderChart2_ServiceTrendsLine() {
 
   if (chartInstances['chart2']) chartInstances['chart2'].destroy();
 
+  const colors = getChartColors();
+
   chartInstances['chart2'] = new Chart(ctx, {
     type: 'line',
     data: {
@@ -265,7 +370,7 @@ function renderChart2_ServiceTrendsLine() {
           label: 'จำนวน visit ผู้ป่วยนอก (ครั้ง)',
           data: opdVisits,
           borderColor: '#0284c7',
-          backgroundColor: 'rgba(2, 132, 199, 0.1)',
+          backgroundColor: 'rgba(2, 132, 199, 0.15)',
           fill: true,
           tension: 0.3
         },
@@ -273,7 +378,7 @@ function renderChart2_ServiceTrendsLine() {
           label: 'จำนวนคนผู้รับบริการ (คน)',
           data: opdPatients,
           borderColor: '#0d9488',
-          backgroundColor: 'rgba(13, 148, 136, 0.1)',
+          backgroundColor: 'rgba(13, 148, 136, 0.15)',
           fill: true,
           tension: 0.3
         }
@@ -283,11 +388,11 @@ function renderChart2_ServiceTrendsLine() {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { grid: { display: false } },
-        y: { grid: { color: '#f1f5f9' } }
+        x: { grid: { display: false }, ticks: { color: colors.text, font: { family: 'Sarabun' } } },
+        y: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { family: 'Sarabun' } } }
       },
       plugins: {
-        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11, family: 'Sarabun' } } }
+        legend: { position: 'bottom', labels: { boxWidth: 12, color: colors.legendText, font: { size: 11, family: 'Sarabun' } } }
       }
     }
   });
@@ -314,6 +419,8 @@ function renderChart3_IpdServiceTrendsLine() {
 
   if (chartInstances['chart3']) chartInstances['chart3'].destroy();
 
+  const colors = getChartColors();
+
   chartInstances['chart3'] = new Chart(ctx, {
     type: 'line',
     data: {
@@ -323,7 +430,7 @@ function renderChart3_IpdServiceTrendsLine() {
           label: 'จำนวนวันนอนรวม (วัน)',
           data: ipdStayDays,
           borderColor: '#f59e0b',
-          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          backgroundColor: 'rgba(245, 158, 11, 0.15)',
           fill: true,
           tension: 0.3
         },
@@ -331,7 +438,7 @@ function renderChart3_IpdServiceTrendsLine() {
           label: 'จำนวนผู้ป่วยใน Admit (คน)',
           data: ipdAdmits,
           borderColor: '#8b5cf6',
-          backgroundColor: 'rgba(139, 92, 246, 0.1)',
+          backgroundColor: 'rgba(139, 92, 246, 0.15)',
           fill: true,
           tension: 0.3
         }
@@ -341,11 +448,11 @@ function renderChart3_IpdServiceTrendsLine() {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { grid: { display: false } },
-        y: { grid: { color: '#f1f5f9' } }
+        x: { grid: { display: false }, ticks: { color: colors.text, font: { family: 'Sarabun' } } },
+        y: { grid: { color: colors.grid }, ticks: { color: colors.text, font: { family: 'Sarabun' } } }
       },
       plugins: {
-        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11, family: 'Sarabun' } } }
+        legend: { position: 'bottom', labels: { boxWidth: 12, color: colors.legendText, font: { size: 11, family: 'Sarabun' } } }
       }
     }
   });
@@ -538,6 +645,8 @@ function renderLeftSubChart(processed, targetColIdx) {
 
   const colors = ['#0284c7', '#0d9488', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#6366f1', '#10b981', '#f43f5e', '#a855f7', '#06b6d4'];
 
+  const chartColors = getChartColors();
+
   if (isMonthOrTime) {
     // Render LINE CHART for monthly time series (e.g. สถิติผู้ป่วย OPD & IPD)
     chartInstances['subtabLeft'] = new Chart(ctx, {
@@ -559,11 +668,11 @@ function renderLeftSubChart(processed, targetColIdx) {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: { grid: { display: false } },
-          y: { grid: { color: '#f1f5f9' } }
+          x: { grid: { display: false }, ticks: { color: chartColors.text, font: { family: 'Sarabun' } } },
+          y: { grid: { color: chartColors.grid }, ticks: { color: chartColors.text, font: { family: 'Sarabun' } } }
         },
         plugins: {
-          legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 10, family: 'Sarabun' } } }
+          legend: { display: true, position: 'top', labels: { boxWidth: 10, color: chartColors.legendText, font: { size: 10, family: 'Sarabun' } } }
         }
       }
     });
@@ -582,7 +691,7 @@ function renderLeftSubChart(processed, targetColIdx) {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10, family: 'Sarabun' } } }
+          legend: { position: 'right', labels: { boxWidth: 10, color: chartColors.legendText, font: { size: 10, family: 'Sarabun' } } }
         }
       }
     });
@@ -626,6 +735,8 @@ function renderSubChart(processed, colsToUse) {
     };
   });
 
+  const chartColors = getChartColors();
+
   chartInstances['subtab'] = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -636,11 +747,11 @@ function renderSubChart(processed, colsToUse) {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { grid: { display: false } },
-        y: { grid: { color: '#f1f5f9' }, title: { display: true, text: 'จำนวนเงิน (บาท) / รายการ' } }
+        x: { grid: { display: false }, ticks: { color: chartColors.text, font: { family: 'Sarabun' } } },
+        y: { grid: { color: chartColors.grid }, ticks: { color: chartColors.text, font: { family: 'Sarabun' } }, title: { display: true, text: 'จำนวนเงิน (บาท) / รายการ', color: chartColors.text } }
       },
       plugins: {
-        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11, family: 'Sarabun' } } }
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, color: chartColors.legendText, font: { size: 11, family: 'Sarabun' } } }
       }
     }
   });
@@ -667,20 +778,20 @@ function renderTablesWrapper(currentSheet) {
 
 function createTableCard(title, processed, tableId) {
   const card = document.createElement('div');
-  card.className = 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden';
+  card.className = 'chart-card rounded-xl overflow-hidden';
 
   const headerDiv = document.createElement('div');
-  headerDiv.className = 'p-4 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3';
+  headerDiv.className = 'p-4 border-b border-[var(--card-border)] flex flex-col sm:flex-row items-center justify-between gap-3';
 
   headerDiv.innerHTML = `
     <div class="flex items-center gap-2">
-      <i class="fa-solid fa-table text-sky-600 text-sm"></i>
-      <h3 class="text-sm font-bold text-slate-800">${title}</h3>
+      <i class="fa-solid fa-table text-sky-500 text-sm"></i>
+      <h3 class="text-sm font-bold text-[var(--text-heading)]">${title}</h3>
     </div>
     <div class="flex items-center gap-3 w-full sm:w-auto">
       <div class="relative w-full sm:w-64">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-        <input type="text" id="search-${tableId}" placeholder="ค้นหาในตาราง..." class="w-full text-xs pl-8 pr-3 py-1.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+        <input type="text" id="search-${tableId}" placeholder="ค้นหาในตาราง..." class="w-full text-xs pl-8 pr-3 py-1.5 border border-[var(--card-border)] bg-[var(--card-bg)] text-[var(--text-main)] rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
       </div>
     </div>
   `;
@@ -696,7 +807,7 @@ function createTableCard(title, processed, tableId) {
   const tbody = document.createElement('tbody');
   tbody.id = `tbody-${tableId}`;
   const tfoot = document.createElement('tfoot');
-  tfoot.className = 'bg-slate-100 font-bold border-t-2 border-slate-300';
+  tfoot.className = 'bg-[var(--table-header-bg)] font-bold border-t-2 border-[var(--table-border)]';
 
   if (processed.headers) {
     const trHead = document.createElement('tr');
@@ -723,7 +834,7 @@ function createTableCard(title, processed, tableId) {
           isColNumeric[colIdx] = true;
           colTotals[colIdx] += numVal;
           td.textContent = formatCurrency(numVal);
-          td.className = 'text-right font-mono text-slate-700';
+          td.className = 'text-right font-mono text-[var(--text-main)]';
         } else {
           td.textContent = rawVal === null || rawVal === undefined ? '' : rawVal;
         }
@@ -739,10 +850,10 @@ function createTableCard(title, processed, tableId) {
       const td = document.createElement('td');
       if (colIdx === 0) {
         td.textContent = 'รวมทั้งหมด (Total)';
-        td.className = 'font-bold text-slate-900';
+        td.className = 'font-bold text-[var(--text-heading)]';
       } else if (isColNumeric[colIdx]) {
         td.textContent = formatCurrency(colTotals[colIdx]);
-        td.className = 'text-right font-bold text-emerald-600 font-mono';
+        td.className = 'text-right font-bold text-emerald-400 font-mono';
       } else {
         td.textContent = '';
       }
