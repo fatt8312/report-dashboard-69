@@ -51,7 +51,16 @@ const SHEET_CONFIGS = [
   //{ id: '1877989780', gid: '1877989780', sheetName: 'EMS', category: 'cat3', name: 'EMS สพฉ.', label: '18. แพทย์ฉุกเฉิน (EMS สพฉ.)' },
   { id: '1076853556', gid: '1076853556', sheetName: 'Palliative Care(mis)*', category: 'cat3', name: 'Palliative Care', label: '10. Palliative Care (ดูแลระยะสุดท้าย)' },
   { id: '301771837', gid: '301771837', sheetName: 'อุปกรณ์เทียม(mis)', category: 'cat3', name: 'อุปกรณ์เทียม/บำบัด', label: '11. อุปกรณ์เทียม & กายบำบัด' },
-  { id: '1482513277', gid: '1482513277', sheetName: 'Seamless, HC FS', category: 'cat3', name: 'Seamless for DMIS', label: '12. Seamless for DMIS' },
+  { id: '1482513277',
+    category: 'cat3', 
+    name: 'Seamless for DMIS', 
+    label: '12. Seamless for DMIS',
+    tables: [
+      { name: 'seamless, HC FS', title: 'ตารางบูรณาการธุรกรรมการเบิกจ่ายงบกองทุน (Seamless for DMIS)'},
+      { name: 'Seamless MIS', title: 'ตาราง Seamless MIS'},
+      { name: 'KTB จาก MIS', title: 'KTB จาก MIS ของรพ. รายการ'}
+    ] 
+  },
   //{ id: '705249107', gid: '705249107', sheetName: 'สังคมสงเคราะห์', category: 'cat3', name: 'สังคมสงเคราะห์', label: '22. สังคมสงเคราะห์' },
   { 
     id: 'stats_combined', 
