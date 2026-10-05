@@ -57,9 +57,9 @@ const SHEET_CONFIGS = [
     label: '12. Seamless for DMIS',
     tables: [
       { name: 'seamless, HC FS', title: 'ตารางบูรณาการธุรกรรมการเบิกจ่ายงบกองทุน (Seamless for DMIS)'},
-      { name: 'Seamless MIS', title: 'ตาราง Seamless MIS'},
+      { name: 'Seamless MIS', title: 'Seamless MIS'},
       { name: 'KTB จาก MIS', title: 'KTB จาก MIS ของรพ. รายการ'}
-    ] 
+    ]
   },
   //{ id: '705249107', gid: '705249107', sheetName: 'สังคมสงเคราะห์', category: 'cat3', name: 'สังคมสงเคราะห์', label: '22. สังคมสงเคราะห์' },
   { 
@@ -232,7 +232,7 @@ class SheetsService {
         return !this.isTotalRow(r);
       });
       return {
-        headers: ['เดือน', 'Admit', 'UC', 'OFC', 'LGO', 'SSS', 'อื่นๆ', 'วันนอนรวม', 'วันนอน UC', 'วันนอน OFC', 'วันนอน LGO', 'วันนอน SSS', 'วันนอน อื่นๆ', 'อัตราครองเตียง (%)'],
+        headers: ['เดือน', 'Admit', 'UC', 'OFC', 'LGO', 'SSS', 'อื่นๆ','วันนอนรวม', 'วันนอน UC', 'วันนอน OFC', 'วันนอน LGO', 'วันนอน SSS', 'วันนอน อื่นๆ','อัตราครองเตียง (%)', 'AdjRW รวม','AdjRW UC', 'AdjRW OFC', 'AdjRW LGO', 'AdjRW SSS', 'AdjRW อื่นๆ','CMI รวม','CMI UC', 'CMI OFC', 'CMI LGO', 'CMI SSS', 'CMI อื่นๆ'],
         data: dataRows
       };
     }
