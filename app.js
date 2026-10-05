@@ -11,6 +11,7 @@
 let activeMainTab = 'overview';
 let activeCat = null;
 let activeSubTabId = '1348229664';
+let activeTableIdx = 0;
 let chartInstances = {};
 
 let currentTheme = localStorage.getItem('theme-color') || 'cyan';
@@ -479,6 +480,7 @@ function setupCategorySubTabs(cat) {
     btn.textContent = cfg.label;
     btn.addEventListener('click', () => {
       activeSubTabId = cfg.id;
+      activeTableIdx = 0;
       setupCategorySubTabs(cat);
       renderSubTabViewer();
     });
@@ -486,34 +488,44 @@ function setupCategorySubTabs(cat) {
   });
 }
 
+function getActiveProcessed(sheet) {
+  if (sheet.multiTables?.length) {
+    if (activeTableIdx >= sheet.multiTables.length) activeTableIdx = 0;
+    return sheet.multiTables[activeTableIdx].processed;
+  }
+  return sheet.processed;
+}
+
 function renderSubTabViewer() {
   const currentSheet = window.sheetsService.cache[activeSubTabId];
   if (!currentSheet) return;
-
   const cfg = currentSheet.config;
-  const processed = currentSheet.processed;
 
-  // Header & Info
-  document.getElementById('sub-tab-code').textContent = cfg.gid ? `แท็บข้อมูล [GID: ${cfg.gid}]` : `แท็บข้อมูลผสม [COMBINED]`;
+  document.getElementById('sub-tab-code').textContent =
+    cfg.gid ? `แท็บข้อมูล [GID: ${cfg.gid}]` : `แท็บข้อมูลผสม [COMBINED]`;
   document.getElementById('sub-tab-title').textContent = cfg.label;
-  document.getElementById('sub-tab-desc').textContent = `ข้อมูลสดล่าสุดจาก Google Sheets [${cfg.name}]`;
 
-  // Determine Comparison Columns (Col 1 vs Col 2)
+  renderSubTabCharts(currentSheet);   // การ์ดบน + กราฟ 2 ตัว
+  renderTablesWrapper(currentSheet);  // ตาราง
+}
+
+// วาดเฉพาะส่วนที่ขึ้นกับตารางที่เลือก
+function renderSubTabCharts(currentSheet) {
+  const cfg = currentSheet.config;
+  const processed = getActiveProcessed(currentSheet);
+  const isMulti = currentSheet.multiTables?.length > 1;
+
+  document.getElementById('sub-tab-desc').textContent = isMulti
+    ? `กราฟจากตาราง: ${currentSheet.multiTables[activeTableIdx].title} (คลิกตารางด้านล่างเพื่อเปลี่ยน)`
+    : `ข้อมูลสดล่าสุดจาก Google Sheets [${cfg.name}]`;
+
   const colsToUse = getComparisonColumns(processed);
   const col1Idx = colsToUse[0] !== undefined ? colsToUse[0] : 1;
   const col2Idx = colsToUse[1] !== undefined ? colsToUse[1] : 2;
 
-  // 1. Calculate Top Comparison Metric Cards
   renderTopComparisonCards(processed, col1Idx, col2Idx);
-
-  // 2. Render Left Sub-Tab Chart (ROBUST detection: Donut for funds/services, Line ONLY for true monthly series)
   renderLeftSubChart(processed, col2Idx !== undefined ? col2Idx : col1Idx);
-
-  // 3. Render Right Bar Comparison Chart
   renderSubChart(processed, colsToUse);
-
-  // 4. Render Dynamic Stacked Tables
-  renderTablesWrapper(currentSheet);
 }
 
 function getComparisonColumns(processed) {
@@ -765,15 +777,48 @@ function renderTablesWrapper(currentSheet) {
   if (!wrapper) return;
   wrapper.innerHTML = '';
 
-  if (currentSheet.multiTables && currentSheet.multiTables.length > 0) {
-    currentSheet.multiTables.forEach((tbl, idx) => {
+  const multi = currentSheet.multiTables;
+  if (multi && multi.length > 0) {
+    multi.forEach((tbl, idx) => {
       const card = createTableCard(tbl.title, tbl.processed, `tbl-${idx}`);
+      if (multi.length > 1) {
+        card.dataset.tblIdx = idx;
+        card.classList.add('selectable-table');
+        card.addEventListener('click', () => {
+          if (activeTableIdx === idx) return;
+          activeTableIdx = idx;
+          updateTableSelection(wrapper);
+          renderSubTabCharts(currentSheet);
+          document.getElementById('chart-subtab-left')
+          .scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
       wrapper.appendChild(card);
     });
+    if (multi.length > 1) updateTableSelection(wrapper);
   } else {
-    const card = createTableCard('ตารางข้อมูลฉบับเต็ม (Interactive Table)', currentSheet.processed, 'tbl-single');
-    wrapper.appendChild(card);
+    wrapper.appendChild(
+      createTableCard('ตารางข้อมูลฉบับเต็ม (Interactive Table)', currentSheet.processed, 'tbl-single')
+    );
   }
+}
+
+function updateTableSelection(wrapper) {
+  wrapper.querySelectorAll('.selectable-table').forEach(card => {
+    const on = Number(card.dataset.tblIdx) === activeTableIdx;
+    card.classList.toggle('table-selected', on);
+
+    const titleBox = card.querySelector('h3').parentElement;
+    let badge = titleBox.querySelector('.select-badge');
+    if (on && !badge) {
+      badge = document.createElement('span');
+      badge.className = 'select-badge';
+      badge.textContent = '● แสดงในกราฟ';
+      titleBox.appendChild(badge);
+    } else if (!on && badge) {
+      badge.remove();
+    }
+  });
 }
 
 function createTableCard(title, processed, tableId) {
@@ -862,6 +907,7 @@ function createTableCard(title, processed, tableId) {
     tfoot.appendChild(trFoot);
   }
 
+  thead.querySelectorAll('th').forEach((th, colIdx) => {th.style.textAlign = isColNumeric[colIdx] ? 'right' : 'left';});
   table.appendChild(thead);
   table.appendChild(tbody);
   table.appendChild(tfoot);
